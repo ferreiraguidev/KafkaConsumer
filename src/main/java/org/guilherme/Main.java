@@ -1,33 +1,34 @@
 package org.guilherme;
 
-import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.guilherme.adapter.config.KafkaConsumerConfig;
+import org.guilherme.model.Customer;
 
 import java.time.Duration;
-import java.util.Collections;
-
-import static org.guilherme.adapter.config.KafkaConsumerConfig.properties;
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Main {
     public static void main(String[] args) {
-
-        var consumer = new KafkaConsumer<String, String>(properties());
         var topic = "typeOfMessageTransitsHere";
 
-        consumer.subscribe(Collections.singletonList(topic));
+        Customer msgProd = Customer.builder().cpf("test").name("1.0").build();
+
+        AtomicReference<Customer> msgCons = new AtomicReference<>();
+
+        KafkaConsumer<String, Customer> consumer = KafkaConsumerConfig.properties();
+        consumer.subscribe(Arrays.asList(topic));
 
 
-        while(true){
-            // pull records -> set time out
-            var records = consumer.poll(Duration.ofMillis(100));
-
-            for (ConsumerRecord<String,String> record : records){
-                System.out.println("event recieved");
-                System.out.println("----------------");
-                System.out.println("KEY: " + record.key());
-                System.out.println("VALUE: " + record.value());
-                System.out.println("----------------");
-            }
+        while (true){
+            ConsumerRecords<String, Customer> records = consumer.poll(Duration.ofSeconds(10000));
+            records.forEach(record -> {
+                msgCons.set(record.value());
+                System.out.println("Message received " + msgProd.getCpf() +"   "+ msgProd.getName());
+            });
+            consumer.close();
         }
+
     }
 }
