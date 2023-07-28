@@ -3,7 +3,6 @@ package org.guilherme.adapter.config;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.guilherme.deserializer.CustomerDes;
 import org.guilherme.model.Customer;
 
 import java.util.Properties;

@@ -1,9 +1,8 @@
 package org.guilherme.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
 
-@Builder
+
 public class Customer {
 
     @JsonProperty

@@ -13,7 +13,7 @@ import java.util.Map;
 @Slf4j
 public class CustomerDes implements Deserializer<Customer> {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private Customer customer = new Customer("5454545", "name");
 
     @Override
@@ -38,6 +38,4 @@ public class CustomerDes implements Deserializer<Customer> {
     @Override
     public void close() {
     }
-
-
 }
